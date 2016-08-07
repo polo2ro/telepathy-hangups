@@ -6,13 +6,13 @@ Although the XMPP gateway exists, this could close at any moment and does not al
 
 It is **not** ready for usage.
 
-==Requirements==
+## Requirements
 
 Python 3.4
 hangups (https://github.com/tdryer/hangups/)
 python-dbus
 
-==Running==
+## Running
 
 Run generate_login.py
 This will prompt you for a user name and password and cache the auth result.
@@ -27,7 +27,7 @@ you should see a contact list
 starting a chat will open a window, but sending/receiving messages is not implemeneted yet
 
 
-==Developing==
+## Developing
 
 I would love help developing.
 
