@@ -8,6 +8,7 @@ from .text_channel import HangupsTextChannel
 from os.path import expanduser
 
 
+
 class HangupsConnection(telepathy.server.Connection,
         telepathy.server.ConnectionInterfaceRequests,
         telepathy.server.ConnectionInterfaceSimplePresence,
@@ -65,10 +66,25 @@ class HangupsConnection(telepathy.server.Connection,
         print ("doing connect")
         if self._status == telepathy.CONNECTION_STATUS_DISCONNECTED:
             self.StatusChanged(telepathy.CONNECTION_STATUS_CONNECTING, telepathy.CONNECTION_STATUS_REASON_REQUESTED)
-            cookies = hangups.auth.get_auth(None, None, expanduser("~/.hangups_auth_tmp"))
+
+            # cookies = hangups.auth.get_auth(None, None, expanduser("~/.hangups_auth_tmp"))
+            cookies = hangups.auth.get_auth_stdin(expanduser("~/.hangups_auth_tmp"))
             self._client = hangups.Client(cookies)
-            self._client.on_connect.add_observer(self._on_connect)
-            asyncio.async(self._client.connect())
+            # self._client.on_connect.add_observer(self._on_connect)
+
+            self._client.on_connect.add_observer(lambda: asyncio.async(
+                self._on_connect(self._client, sys.argv[1:])
+            ))
+
+            # asyncio.async(self._client.connect())
+
+            loop = asyncio.get_event_loop()
+
+            try:
+                loop.run_until_complete(self._client.connect())
+            except Exception as err:
+                print("error: {0}".format(err))
+
 
     def Disconnect(self):
         self.__disconnect_reason = telepathy.CONNECTION_STATUS_REASON_REQUESTED

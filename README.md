@@ -11,6 +11,7 @@ It is **not** ready for usage.
 Python 3.4
 hangups (https://github.com/tdryer/hangups/)
 python-dbus
+asyncio
 
 ## Running
 
